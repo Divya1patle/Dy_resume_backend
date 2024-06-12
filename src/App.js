@@ -3,6 +3,12 @@ import Resume from './resume_temp';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Modal } from 'bootstrap';
+import Swal from 'sweetalert2';
+// import QuillEditor from "react-quill";
+// import "react-quill/dist/quill.snow.css";
+// import parse from 'html-react-parser';
+// Importing core components
+
 // import { json } from 'body-parser';
 
 function App() {
@@ -13,6 +19,9 @@ function App() {
   const [experience, setExperience] = useState('');
   const [email, setEmail] = useState('');
   const [formError, setFormError] = useState(false);
+
+
+  // const [value, setValue] = useState("");
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -55,10 +64,6 @@ function App() {
     }
     console.log(data)
     setData(data)
-
-    const modalElement = document.getElementById('exampleModal');
-    const modal = new Modal(modalElement, { backdrop: false });
-    // modal.show();
   };
 
   const setData = (data) => {
@@ -71,16 +76,21 @@ function App() {
       body: JSON.stringify(data)
 
     }).then((res) => {
-      alert(res);
+      const modalElement = document.getElementById('exampleModal');
+      const modal = new Modal(modalElement, { backdrop: false });
+      modal.show();
     }).catch((error) => {
-      alert(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
     })
   }
 
   return (
-    <div className="container mb-5 mt-3" >
+    <div className="container mb-5 mt-3 " >
       <h1 className="text-center">Resume Generator</h1>
-
       <form className="mt-5">
         <div className="row">
           <div className="col-md-6">
@@ -117,15 +127,23 @@ function App() {
             />
 
             <label htmlFor="projects" className="mt-5">Projects</label>
-            <textarea
+            {/* <QuillEditor style={{ height: "30%" }}
+              theme="snow"
+              value={projects}
+              preserveWhitespace={true}
+              onChange={(value) => setProjects(value)}
+            /> */}
+
+            {/* {parse(projects)} */}
+            {<textarea
               className="form-control"
               rows="3"
               id="projects"
               name="projects"
               value={projects}
-              onChange={handleInputChange}
-            ></textarea>
+              onChange={handleInputChange}></textarea>}
           </div>
+
           <div className="col-md-6">
             <label htmlFor="skills" className="form-label">Skills</label>
             <textarea
@@ -137,21 +155,32 @@ function App() {
               onChange={handleInputChange}
             ></textarea>
 
-            <label htmlFor="experience" className="mt-4">Experience</label>
-            <textarea
+            <label htmlFor="experience" className="mt-5">Experience</label>
+
+            {<textarea
               className="form-control"
               rows="3"
               id="experience"
               name="experience"
               value={experience}
               onChange={handleInputChange}
-            ></textarea>
+            ></textarea>}
+            {/* 
+            <QuillEditor style={{ height: "30%" }}
+              theme="snow"
+              value={experience}
+              preserveWhitespace={true}
+              onChange={(value) => setExperience(value)}
+            /> */}
+
+            {/* {parse(experience)} */}
+
           </div>
           {formError && <div className="alert alert-danger mt-3">{formError}</div>}
         </div>
       </form>
       <div className="text-center mt-5">
-        <button type="button" className="btn btn-primary btn-lg" onClick={generateCv}>Submit</button>
+        <button type="button" className="btn btn-primary btn-lg mt-5" onClick={generateCv}>Submit</button>
       </div>
       <Resume name={name} phone={phone} projects={projects} skills={skills} experience={experience} email={email} />
     </div>
